@@ -3,6 +3,8 @@ import numpy as np
 import os
 import time
 import pandas as pd
+import traceback
+
 import my_utils
 
 MY_PUUID = '51pKOAjVvVFCP77maBPpiMCeSeQrKFLjFLa9Wo9mngMGqYSgS0CbFfnYjuMcn7uBYXalM5DBWcF0Fg'
@@ -58,30 +60,34 @@ class datacrawler:
         return result
 
     def request_handler(self):
-        if self.requests == 100:
+        if self.requests == 99:
+            print('waitlong')
             time.sleep(116)
             self.requests = 0
         if (self.requests % 20 == 0) and (self.requests != 0):
             time.sleep(1)
+            print('waitshort')
+        print(self.requests)
+
+    
 
     def datacrawl(self, player, layer, max_layer):
         matches = player.matches
+        index = len(matches) - 1
         try:
-            if layer < max_layer:
-                
+            if (layer < max_layer) and index >= 0:
                 self.request_handler()
-                
-                data = self.get_match_data(matches[1])
-                
+                data = self.get_match_data(matches[index])
                 players = self.get_player_puuid_in_match(data, player.puuid)
-                
                 self.puuid_set.update(players)
                 for x in range(3):
+                    self.request_handler()
                     p = playerobj(players[x], 2)
-                    print('huh')
+                    self.requests += 1
                     self.datacrawl(p, layer + 1, max_layer)
         except Exception as e: 
-            print(e)
+            traceback.print_exc()
+            print(self.get_match_data(matches[index]))
                 
 def main():
     me = playerobj(MY_PUUID, 5)
@@ -95,7 +101,7 @@ def main():
     #my_utils.set_to_txt(a, 'matchid_list.txt')
     #print(my_utils.txt_to_set('matchid_list.txt'))
     test = datacrawler()
-    test.datacrawl(me, 0, 3)
+    test.datacrawl(me, 0, 7)
     my_utils.set_to_txt(test.puuid_set, 'puuid_list.txt')
 
 
