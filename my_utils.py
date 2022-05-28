@@ -7,7 +7,7 @@ def set_to_txt(set, filename):
 def txt_to_set(filename):
     data = set()
     with open(filename, 'r') as f:
-        for line in f:
+        for line in f.readlines():
             x = line[:-1]
             data.add(x)
     return data

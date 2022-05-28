@@ -8,7 +8,7 @@ import traceback
 import my_utils
 
 MY_PUUID = '51pKOAjVvVFCP77maBPpiMCeSeQrKFLjFLa9Wo9mngMGqYSgS0CbFfnYjuMcn7uBYXalM5DBWcF0Fg'
-API_KEY = 'RGAPI-a7b06e50-6c8c-49c9-bb2e-1c2c3d6a077f'
+API_KEY = 'RGAPI-7b26fab6-1a77-4077-93bc-444f94def9f8'
 
 class playerobj: 
     """
@@ -28,6 +28,7 @@ class datacrawler:
         self.requests = 0
 
     def get_match_data(self, matchid):
+        self.request_handler()
         response = requests.get('https://americas.api.riotgames.com/lol/match/v5/matches/' + matchid + '?api_key=' + API_KEY)
         self.requests += 1
         return response.json()
@@ -44,7 +45,7 @@ class datacrawler:
         result = {}
         participants = dict['info']['participants']
         win = 0 # 1 if first team wins
-        if participants[0]['win'] == 'true':
+        if str(participants[0]['win']) == 'True':
             win = 1
         result.update({'win':win})
         result.update({'one1':participants[0]['championName']})
@@ -67,8 +68,8 @@ class datacrawler:
         if (self.requests % 20 == 0) and (self.requests != 0):
             time.sleep(1)
             print('waitshort')
+        self.requests += 1
         print(self.requests)
-
     
 
     def datacrawl(self, player, layer, max_layer):
@@ -83,27 +84,67 @@ class datacrawler:
                 for x in range(3):
                     self.request_handler()
                     p = playerobj(players[x], 2)
-                    self.requests += 1
                     self.datacrawl(p, layer + 1, max_layer)
         except Exception as e: 
             traceback.print_exc()
             print(self.get_match_data(matches[index]))
-                
-def main():
-    me = playerobj(MY_PUUID, 5)
-    #print(a.matches)                         
-    #dc = datacrawler()
-    #data = dc.get_match_data('NA1_4317076649')
-    #print(len(dc.get_player_puuid_in_match(data, MY_PUUID)))
-    #print(dc.get_relevant_data(data))
-    #a = set()
-    #a.update(['john', 'james', 'jill', 'jack'])
-    #my_utils.set_to_txt(a, 'matchid_list.txt')
-    #print(my_utils.txt_to_set('matchid_list.txt'))
-    test = datacrawler()
-    test.datacrawl(me, 0, 7)
-    my_utils.set_to_txt(test.puuid_set, 'puuid_list.txt')
+    
+    
+    def find_matchids(self, games_per_player):
+        for id in self.puuid_set:
+            try:
+                self.request_handler()
+                p = playerobj(id, games_per_player)
+                if 'status' not in p.matches:
+                    self.matchid_set.update(p.matches)
+            except Exception as e:
+                traceback.print_exc()
+    
+    def gather_data(self, filename):
+        data = []
+        for match in self.matchid_set:
+            try:
+                self.request_handler()
+                match_data = self.get_relevant_data(self.get_match_data(match)) 
+                data.append(match_data)
+            except Exception as e:
+                traceback.print_exc()
+        df = pd.DataFrame(data)
+        df.to_csv(filename)
 
+
+def get_puuids():
+    me = playerobj(MY_PUUID, 3)
+    dcrawl = datacrawler()
+    dcrawl.datacrawl(me, 0, 8)
+    my_utils.set_to_txt(dcrawl.puuid_set)
+
+
+def get_matchid():
+    puuid_set = my_utils.txt_to_set('puuid_list.txt')   
+    dcrawl = datacrawler(set(), puuid_set)
+    dcrawl.find_matchids(10)
+    matchids = dcrawl.matchid_set
+    
+    my_utils.set_to_txt(matchids, 'matchid_list.txt')
+
+
+def get_data():
+    dcrawl = datacrawler(my_utils.txt_to_set('matchid_list.txt'), set())
+    dcrawl.gather_data('match_data.csv')
+
+
+def main():
+    #dcrawl = datacrawler()
+    #data = dcrawl.get_match_data('NA1_4318893160')
+    #participants = data['info']['participants']
+    #print(participants[2]['win'])
+    #get_data()
+    #get_matchid()
+    #response = requests.get('https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/' + \
+                                #'gRxjfafW7-mX_riuSUeIcYurcqEYPsSsRJomihBt5JOoQr4YRUtga2nRLD70AZo8ULOJgJJ6BHuKUQ' + '/ids?type=ranked&start=0&count=' + str(10) + '&api_key=' + API_KEY)
+    #print(response.status_code)
+    get_matchid()
 
 if __name__ == '__main__':
     main()
