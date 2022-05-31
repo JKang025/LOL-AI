@@ -8,7 +8,7 @@ import traceback
 import my_utils
 
 MY_PUUID = '51pKOAjVvVFCP77maBPpiMCeSeQrKFLjFLa9Wo9mngMGqYSgS0CbFfnYjuMcn7uBYXalM5DBWcF0Fg'
-API_KEY = 'RGAPI-7b26fab6-1a77-4077-93bc-444f94def9f8'
+API_KEY = 'RGAPI-891ba62d-cae2-49ca-9cbd-93d1dd442026'
 
 class playerobj: 
     """
@@ -30,7 +30,6 @@ class datacrawler:
     def get_match_data(self, matchid):
         self.request_handler()
         response = requests.get('https://americas.api.riotgames.com/lol/match/v5/matches/' + matchid + '?api_key=' + API_KEY)
-        self.requests += 1
         return response.json()
 
     def get_player_puuid_in_match(self, dict, ignorepuuid):
@@ -104,7 +103,6 @@ class datacrawler:
         data = []
         for match in self.matchid_set:
             try:
-                self.request_handler()
                 match_data = self.get_relevant_data(self.get_match_data(match)) 
                 data.append(match_data)
             except Exception as e:
@@ -144,7 +142,9 @@ def main():
     #response = requests.get('https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/' + \
                                 #'gRxjfafW7-mX_riuSUeIcYurcqEYPsSsRJomihBt5JOoQr4YRUtga2nRLD70AZo8ULOJgJJ6BHuKUQ' + '/ids?type=ranked&start=0&count=' + str(10) + '&api_key=' + API_KEY)
     #print(response.status_code)
-    get_matchid()
+    #get_matchid()
+
+    get_data()
 
 if __name__ == '__main__':
     main()
