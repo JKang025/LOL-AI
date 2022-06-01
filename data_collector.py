@@ -1,14 +1,11 @@
 import requests
-import numpy as np
-import os
 import time
 import pandas as pd
 import traceback
-
 import my_utils
 
 MY_PUUID = '51pKOAjVvVFCP77maBPpiMCeSeQrKFLjFLa9Wo9mngMGqYSgS0CbFfnYjuMcn7uBYXalM5DBWcF0Fg'
-API_KEY = 'RGAPI-891ba62d-cae2-49ca-9cbd-93d1dd442026'
+API_KEY = 'RGAPI-de3f1231-ea52-4344-b6da-438dd521fbe8'
 
 class playerobj: 
     """
@@ -128,23 +125,20 @@ def get_matchid():
 
 
 def get_data():
-    dcrawl = datacrawler(my_utils.txt_to_set('matchid_list.txt'), set())
-    dcrawl.gather_data('match_data.csv')
+    dcrawl = datacrawler(my_utils.txt_to_set('test_matchid_list.txt'), set())
+    dcrawl.gather_data('test_match_data.csv')
 
 
 def main():
-    #dcrawl = datacrawler()
-    #data = dcrawl.get_match_data('NA1_4318893160')
-    #participants = data['info']['participants']
-    #print(participants[2]['win'])
-    #get_data()
-    #get_matchid()
-    #response = requests.get('https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/' + \
-                                #'gRxjfafW7-mX_riuSUeIcYurcqEYPsSsRJomihBt5JOoQr4YRUtga2nRLD70AZo8ULOJgJJ6BHuKUQ' + '/ids?type=ranked&start=0&count=' + str(10) + '&api_key=' + API_KEY)
-    #print(response.status_code)
-    #get_matchid()
-
+    """
+    dcrawl = datacrawler()
+    rawd = dcrawl.get_match_data('NA1_4264715107')
+    print(rawd['info']['participants'])
+    a = dcrawl.get_relevant_data(rawd)
+    print(a)
+    """
     get_data()
+
 
 if __name__ == '__main__':
     main()
