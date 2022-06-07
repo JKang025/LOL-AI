@@ -4,6 +4,7 @@ def set_to_txt(set, filename):
         for item in set:
             f.write("%s\n" % item)
 
+
 def txt_to_set(filename):
     data = set()
     with open(filename, 'r') as f:
@@ -11,4 +12,3 @@ def txt_to_set(filename):
             x = line[:-1]
             data.add(x)
     return data
-
