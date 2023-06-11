@@ -243,7 +243,7 @@ def get_data():
     generates match_data.csv
     """
     dcrawl = datacrawler(my_utils.txt_to_set('matchid_list.txt'), set())
-    dcrawl.gather_data('match_data.csv')
+    dcrawl.gather_data('data/match_data.csv')
 
 
 def onehot_data(data):
@@ -271,9 +271,9 @@ def get_good_data():
     """
     generates good_match_data.csv
     """
-    data = pd.read_csv('match_data.csv')
+    data = pd.read_csv('data/match_data.csv')
     data = onehot_data(data)
-    data.to_csv('good_match_data.csv')
+    data.to_csv('data/good_match_data.csv')
 
 
 def get_player_game_data():
@@ -281,17 +281,17 @@ def get_player_game_data():
     generates player_match_history.csv and
     good_player_match_history.csv
     """
-    whole_dataset = pd.read_csv('good_match_data.csv')
+    whole_dataset = pd.read_csv('data/good_match_data.csv')
     player = playerobj(MY_PUUID, 100)
     dcrawl = datacrawler(player.matches, set())
-    dcrawl.gather_player_data('player_match_history.csv', MY_PUUID)
-    data = pd.read_csv('player_match_history.csv')
+    dcrawl.gather_player_data('data/player_match_history.csv', MY_PUUID)
+    data = pd.read_csv('data/player_match_history.csv')
     data = onehot_data(data)
     player_team = data['player_team']
     data = data.reindex(labels=whole_dataset.columns, axis=1)
     data = data.fillna(int(0))
     data = data.merge(right=player_team, left=data)
-    data.to_csv('good_player_match_history.csv')
+    data.to_csv('data/good_player_match_history.csv')
 
 
 def main():

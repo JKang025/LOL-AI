@@ -15,8 +15,8 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 import json
 
-OG_DATA_PATH = 'match_data.csv'
-GOOD_DATA_PATH = 'good_match_data.csv'
+OG_DATA_PATH = 'data/match_data.csv'
+GOOD_DATA_PATH = 'data/good_match_data.csv'
 
 
 def train_treeclassifier(data):
@@ -227,9 +227,9 @@ def get_good_bot_duos():
     final = []
     for key in top_wr_duos:
         final.append(key + ' Winrate: ' + str(duo_wr[key]))
-    with open('best_duos.txt', 'w') as convert_file:
+    with open('data/best_duos.txt', 'w') as convert_file:
         convert_file.write(json.dumps(final))
-    with open('duo_data.txt', 'w') as convert_file:
+    with open('data/duo_data.txt', 'w') as convert_file:
         convert_file.write(json.dumps(duo_wr))
 
 
@@ -241,7 +241,7 @@ def player_predicted_wins():
     """
     dataset = pd.read_csv(GOOD_DATA_PATH)
     model = train_forest_optimal(dataset)
-    player_history = pd.read_csv('good_player_match_history.csv')
+    player_history = pd.read_csv('data/good_player_match_history.csv')
     features = player_history.drop(['player_team', 'win', 'Unnamed: 0'],
                                    axis=1)
     predict = list(model.predict(features))
