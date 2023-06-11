@@ -298,9 +298,12 @@ def main():
     """
     This is the main function to run all aforementioned functions
     """
-    get_puuids()
+    #### try to run the next three functions one by one
+    get_puuids() 
     get_matchid()
     get_data()
+    ####
+
     get_good_data()
     get_player_game_data()
 

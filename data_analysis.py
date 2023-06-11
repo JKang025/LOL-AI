@@ -272,8 +272,14 @@ def main():
     train_treeclassifier(good_data)
     train_neural_model(good_data)
     train_forest_default(good_data)
-    train_forest_hyperparam_random(good_data)
-    train_forest_hyperparam_grid(good_data)
+
+    # the hyperparam finding functions below take a lot of time to run
+    # and the optimal paramaters have already been inserted into
+    # train_forest_optimal(). As the hyperparam functions take so long to run,
+    # leave it commented unless you want to find the optimal paramaters yourself
+    #train_forest_hyperparam_random(good_data)
+    #train_forest_hyperparam_grid(good_data)
+    
     train_forest_optimal(good_data)
     get_good_bot_duos()
     player_predicted_wins()
