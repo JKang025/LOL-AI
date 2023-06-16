@@ -39,7 +39,7 @@ I hope to return to this project with more data and try to use a neural network 
 ### Setup
 There are a few packages that this program requires, outlined in the provided requirements.txt.
 ```
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ### API 
