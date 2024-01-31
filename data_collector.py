@@ -1,6 +1,4 @@
 """
-Jeffrey Kang
-CSE 163 AA
 This file contains the playerobj and datacrawler class which is
 used to generate data from the RIOTAPI and parse through aforementioned
 data to create the dataset of champions + team_win amongst other datasets

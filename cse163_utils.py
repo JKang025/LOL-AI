@@ -1,12 +1,3 @@
-"""
-Hunter Schafer
-CSE 163 AX
-
-A file that contains some CSE 163 specific helper functions
-You do not need to understand how these functions are implemented,
-but you should be able to use the ones we described in class!
-"""
-
 import math
 import re
 

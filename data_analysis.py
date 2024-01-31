@@ -1,6 +1,4 @@
 """
-Jeffrey Kang
-CSE 163 AA
 This file contains the many methods to train, test, and use
 models generated from the dataset that are offshoots of match_data.csv
 """
